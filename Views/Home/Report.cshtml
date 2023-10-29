@@ -1,0 +1,87 @@
+﻿@model Homework03.Models.LibraryVM
+
+<h2>Report</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Book types</h2>
+        <canvas id="genrePieChart"></canvas>
+    </div>
+
+    <div class="col-md-6">
+        <h2>Student with the most books taken</h2>
+        <div class="col">
+        </div>
+        <table class="table" style="width:100%">
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Num of Books Taken</th>
+            </tr>
+            @foreach (var student in ViewBag.TopStudents)
+            {
+                <tr>
+                    <td>@student.mystudentsList[0].name</td>
+                    <td>@student.mystudentsList[0].surname</td>
+                    <td>@student.numOfBookstaken[0]</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<br />
+
+</div>
+</br>
+<div>
+    <label for="FileName">File name:</label>
+    <input type="text" id="FileName" name="FileName" placeholder="Enter a file name">
+
+    <label for="FileType">File Type:</label>
+    <select id="FileType" name="FileType">
+        <option value="PDF">PDF</option>
+        <option value="PNG">PNG</option>
+    </select>
+
+    <button type="button" id="Save">Save</button>
+</div>
+
+<h2>Archive</h2>
+<div class="row">
+    <div class="col-md-12">
+
+ </div>
+    @section Scripts{
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+        var data = @Html.Raw(ViewBag.TypeData);
+
+        var dataLabels = [];
+        var dataVals = [];
+        var dataColors = [];
+
+        for (var index in data) {
+            var type = data[index];
+            dataLabels.push(type.Name);
+            dataVals.push(type.NumOfBooks);
+
+            var colorR = Math.floor((Math.random() * 256));
+            var colorG = Math.floor((Math.random() * 256));
+            var colorB = Math.floor((Math.random() * 256));
+            dataColors.push("rgb(" + colorR + "," + colorG + "," + colorB + ")");
+        }
+
+        var genrePieChartContext = document.getElementById("genrePieChart").getContext("2d");
+        var genreChart = new Chart(genrePieChartContext, {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: dataVals,
+                    backgroundColor: dataColors
+                }],
+                labels: dataLabels
+            }
+        });
+        </script>
+    }
